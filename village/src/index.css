@@ -2,4 +2,17 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background-image: url("smurfBg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
+
+/* 
+I do not own the rights to the background image. 
+source:
+https://www.google.com/search?q=old+school+smurf+background&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiA6_ja3-riAhUthuAKHX2rDMsQ_AUIECgB&biw=1920&bih=1007#imgrc=5g_IWs0N0cAzmM:
+
+https://www.amazon.com/The-Smurfs-Volume-1/dp/B0015PM91C
+
+Used for educational purposes only
+*/

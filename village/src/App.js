@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-
 import './App.css';
 import SmurfForm from './components/SmurfForm';
 import Smurfs from './components/Smurfs';
+import DeleteForm from './components/DeleteForm';
 import axios from 'axios'; // can't to forget to import!!
-import { Link, Route, BrowserRouter as Router } from 'react-router-dom'; // import what you need for the assignment!
+import { NavLink, Route, BrowserRouter as Router } from 'react-router-dom'; // import what you need for the assignment!
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      smurfs: []
+      smurfs: [],
     };
   }
 
@@ -18,35 +18,46 @@ class App extends Component {
   // Notice what your map function is looping over and returning inside of Smurfs.
   // You'll need to make sure you have the right properties on state and pass them down to props.
 
-  componentDidMount() { // using axios!!
+  componentDidMount() {
     axios
-      .get("http://localhost:3333/smurfs")
-      .then(response => {
-        console.log("get response:", response);
-        this.setState({ smurfs: response.data });
-      })
-      .catch(err => {
-        console.log(err);
-      })
+      .get("http://localhost:3333/smurfs") // To retrieve an array all the smurfs in the Smurf DB simply write a get to the endpoint '/smurfs'
+      .then(res => this.setState({ smurfs: res.data }))
+      .catch(err => console.log(err))
   }
 
-  handleSetData = data => {
-    console.log(data, "data");
-    this.setState({ smurfs: data })
+  addSmurf = smurf => {
+    axios
+      .post("http://localhost:3333/smurfs", smurf) // To add a smurf to the Smurf DB you'll need all three fields.
+      .then(res => this.setState({ smurf, smurfs: res.data }))
+      .catch(err => console.log(err))
   }
 
   render() {
     return (
       <div className="App">
-        <SmurfForm handleSetData={this.handleSetData} />
-        <Router>
-          <Route path="/" render={props => (
-            <Smurfs  {...props} smurfs={this.state.smurfs}
-              handleSetData={this.handleSetData}
-            />
-          )}
-          />
-        </Router>
+        <nav className="nav">
+          <div>
+            <NavLink to="/">Home</NavLink>
+          </div>
+          <div>
+            <NavLink to="/form">Add Smurf</NavLink>
+          </div>
+          <div>
+            <NavLink to="/delete-form">Delete Smurf</NavLink>
+          </div>
+
+        </nav>
+
+        <Route path="/form" render={(props) =>
+          <SmurfForm {...props} addSmurf={this.addSmurf} />}
+        />
+
+        <Route exact path="/" render={(props) =>
+          <Smurfs {...props} smurfs={this.state.smurfs} />}
+        />
+        <Route path="/delete-form" render={(props) =>
+          <DeleteForm {...props} deleteSmurf={this.deleteSmurf} />}
+        />
       </div>
     );
   }
